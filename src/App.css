@@ -1,0 +1,157 @@
+.App {
+  text-align: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+  color: white;
+  perspective: 1px;
+  transform-style: preserve-3d;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.App::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at center, rgba(0, 255, 255, 0.1) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.parallax-wrapper {
+  width: 100vw;
+  height: 100vh;
+  padding-top: 20vh;
+  box-sizing: border-box;
+  transform-style: preserve-3d;
+}
+
+.parallax-content {
+  position: relative;
+  padding: 50px;
+  background: transparent;
+  transform-style: preserve-3d;
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+.regular-wrapper {
+  width: 100vw;
+  height: auto;
+  padding: 50px;
+  background: rgba(13, 17, 28, 0.95);
+  z-index: 2;
+  position: relative;
+  transform: translateZ(0);
+}
+
+.parallax-bg {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  transform: translateZ(-8px) scale(2);
+  background-attachment: fixed;
+  will-change: transform;
+}
+
+section {
+  position: relative;
+  z-index: 2;
+}
+
+/* Hero секція */
+section.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 80px;
+}
+
+/* About секція */
+section.about {
+  background: rgba(13, 17, 28, 0.95);
+  position: relative;
+  z-index: 2;
+}
+
+/* Testimonials секція */
+section.testimonials {
+  background: linear-gradient(180deg, rgba(13, 12, 17, 0.9) 0%, rgba(20, 19, 26, 0.9) 100%);
+  position: relative;
+  z-index: 2;
+}
+
+/* Footer */
+footer {
+  background: rgba(13, 17, 28, 1);
+  position: relative;
+  z-index: 2;
+}
+
+/* Анімація для елементів */
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Додаткові ефекти для інтерактивності */
+.hover-glow {
+  transition: all 0.3s ease;
+}
+
+.hover-glow:hover {
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.5),
+               0 0 20px rgba(0, 255, 255, 0.3),
+               0 0 30px rgba(0, 255, 255, 0.1);
+}
+
+/* Плавні переходи між секціями */
+section {
+  transition: transform 0.5s ease-out;
+}
+
+/* Оптимізація для мобільних пристроїв */
+@media (max-width: 768px) {
+  .App {
+    perspective: 4px;
+  }
+  
+  .parallax-bg {
+    transform: translateZ(-4px) scale(2);
+  }
+  
+  section.hero {
+    padding-top: 60px;
+  }
+
+  section.about,
+  section.testimonials {
+    margin-top: -10vh;
+    padding: 10vh 0;
+  }
+  
+  .parallax-content,
+  .regular-wrapper {
+    padding: 30px;
+  }
+} 

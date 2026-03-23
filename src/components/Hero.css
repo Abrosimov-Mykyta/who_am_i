@@ -1,0 +1,465 @@
+/* Стилі для Hero секції */
+.hero {
+  /* position: relative - для правильного позиціонування дочірніх елементів */
+  position: relative;
+  /* min-height: 100vh - висота на весь екран */
+  min-height: 100vh;
+  /* display: flex - включаємо флексбокс для розташування елементів */
+  display: flex;
+  /* align-items: center - вирівнюємо по вертикалі по центру */
+  align-items: center;
+  /* justify-content: center - вирівнюємо по горизонталі по центру */
+  justify-content: center;
+  /* overflow: hidden - приховуємо все, що виходить за межі контейнера */
+  overflow: hidden;
+  /* padding-top: 80px - додаємо відступ зверху для хедера */
+  padding-top: 80px;
+}
+
+/* Стилі для контейнера контенту */
+.hero-content {
+  /* position: relative - для правильного позиціонування відносно оверлею */
+  position: relative;
+  /* z-index: 1 - розміщуємо контент над оверлеєм */
+  z-index: 1;
+  /* display: flex - включаємо флексбокс */
+  display: flex;
+  /* flex-direction: column - вертикальне розташування елементів */
+  flex-direction: column;
+  /* align-items: center - вирівнюємо по горизонталі по центру */
+  align-items: center;
+  /* gap: 2rem - відступ між елементами */
+  gap: 2rem;
+  /* max-width: 800px - максимальна ширина контенту */
+  max-width: 800px;
+  /* padding: 2rem - відступи по боках */
+  padding: 2rem;
+  /* text-align: center - вирівнювання тексту по центру */
+  text-align: center;
+  /* background: rgba(0, 0, 0, 0.2); */
+  /* backdrop-filter: blur(5px); */
+  /* border-radius: 16px; */
+  /* border: 1px solid rgba(0, 255, 255, 0.1); */
+  width: 100%;
+}
+
+/* Стилі для заголовка */
+.hero-title {
+  /* font-size: 4.5rem - великий розмір шрифту */
+  font-size: 4.5rem;
+  /* font-weight: 800 - дуже жирний шрифт */
+  font-weight: 800;
+  /* color: #ffffff - білий колір тексту */
+  color: #ffffff;
+  /* margin: 0 - прибираємо зовнішні відступи */
+  margin: 0;
+  /* line-height: 1.1 - висота рядка */
+  line-height: 1.1;
+  /* Додаємо веселий текстовий ефект */
+  text-shadow: 
+    0 0 10px rgba(0, 255, 255, 0.5),
+    0 0 20px rgba(0, 255, 255, 0.3),
+    0 0 30px rgba(0, 255, 255, 0.1);
+}
+
+/* Стилі для виділеного тексту */
+.highlight {
+  /* Градієнтний текст */
+  background: linear-gradient(90deg, #00ffff 0%, #ff00ff 100%);
+  /* -webkit-background-clip: text - обрізаємо фон по тексту */
+  -webkit-background-clip: text;
+  background-clip: text;
+  /* -webkit-text-fill-color: transparent - робимо текст прозорим */
+  -webkit-text-fill-color: transparent;
+  /* Анімація світіння */
+  animation: neonPulse 2s ease-in-out infinite alternate;
+}
+
+/* Анімація світіння для виділеного тексту */
+@keyframes neonPulse {
+  from {
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.7),
+                 0 0 20px rgba(0, 255, 255, 0.5),
+                 0 0 30px rgba(0, 255, 255, 0.3);
+  }
+  to {
+    text-shadow: 0 0 20px rgba(255, 0, 255, 0.7),
+                 0 0 40px rgba(255, 0, 255, 0.5),
+                 0 0 60px rgba(255, 0, 255, 0.3);
+  }
+}
+
+/* Стилі для підзаголовка */
+.hero-subtitle {
+  /* font-size: 1.5rem - розмір шрифту */
+  font-size: 1.5rem;
+  /* color: #b4b4b4 - сірий колір тексту */
+  color: #b4b4b4;
+  /* margin: 0 - прибираємо зовнішні відступи */
+  margin: 0;
+  /* max-width: 600px - максимальна ширина тексту */
+  max-width: 600px;
+  /* line-height: 1.6 - висота рядка */
+  line-height: 1.6;
+}
+
+/* Стилі для контейнера кнопок */
+.hero-buttons {
+  /* display: flex - включаємо флексбокс */
+  display: flex;
+  /* gap: 1.5rem - відступ між кнопками */
+  gap: 1.5rem;
+  /* margin-top: 1rem - відступ зверху */
+  margin-top: 1rem;
+}
+
+/* Загальні стилі для кнопок */
+.cta-button {
+  /* padding - збільшуємо відступи */
+  padding: 1.2rem 3rem;
+  /* font-size - збільшуємо розмір шрифту */
+  font-size: 1.4rem;
+  /* font-weight - робимо шрифт жирнішим */
+  font-weight: 700;
+  /* border-radius - заокруглені кути */
+  border-radius: 4px;
+  /* cursor: pointer - курсор при наведенні */
+  cursor: pointer;
+  /* transition - плавна анімація */
+  transition: all 0.3s ease;
+  /* border - прибираємо рамку */
+  border: none;
+  /* display - включаємо флексбокс */
+  display: flex;
+  /* align-items - вирівнюємо по вертикалі */
+  align-items: center;
+  /* gap - відступ між іконкою і текстом */
+  gap: 1rem;
+  /* margin - відступ зверху */
+  margin-top: 2rem;
+  /* text-transform: uppercase - перетворюємо текст на великі літери */
+  text-transform: uppercase;
+  /* letter-spacing: 2px - додаємо відступи між символами */
+  letter-spacing: 2px;
+}
+
+/* Стилі для основної кнопки */
+.cta-button.primary {
+  /* background - градієнтний фон */
+  background: linear-gradient(90deg, #00ffff 0%, #ff00ff 100%);
+  /* color - білий текст */
+  color: #000;
+  /* box-shadow - тінь */
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+  /* position: relative - для позиціонування дочірніх елементів */
+  position: relative;
+  /* overflow: hidden - приховуємо все, що виходить за межі контейнера */
+  overflow: hidden;
+}
+
+/* Стилі для іконки кнопки */
+.button-icon {
+  /* font-size - розмір іконки */
+  font-size: 1.6rem;
+}
+
+/* Стилі для другорядної кнопки */
+.cta-button.secondary {
+  /* background: transparent - прозорий фон */
+  background: transparent;
+  /* border: 3px solid #36a2eb - рамка */
+  border: 3px solid #36a2eb;
+  /* color: #36a2eb - колір тексту */
+  color: #36a2eb;
+  /* transform: rotate(2deg) - повертаємо кнопку */
+  transform: rotate(2deg);
+}
+
+/* Стилі для кнопок при наведенні */
+.cta-button:hover {
+  /* transform - ефект при наведенні */
+  transform: translateY(-5px);
+  /* box-shadow - збільшуємо тінь */
+  box-shadow: 0 0 30px rgba(0, 255, 255, 0.7);
+}
+
+/* Стилі для кнопки при наведенні */
+.cta-button.primary::before {
+  /* content: '' - створюємо пустий елемент */
+  content: '';
+  /* position: absolute - позиціонуємо елемент відносно батьківського */
+  position: absolute;
+  /* top: 0 - розташовуємо елемент на верхівці */
+  top: 0;
+  /* left: -100% - розташовуємо елемент за межами контейнера */
+  left: -100%;
+  /* width: 100% - розтягуємо елемент на всю ширину */
+  width: 100%;
+  /* height: 100% - розтягуємо елемент на всю висоту */
+  height: 100%;
+  /* background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent) - градієнтний фон */
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  /* transition: 0.5s - плавна анімація */
+  transition: 0.5s;
+}
+
+/* Стилі для кнопки при наведенні */
+.cta-button.primary:hover::before {
+  /* left: 100% - переміщуємо елемент всередину контейнера */
+  left: 100%;
+}
+
+/* Стилі для секції статистики */
+.hero-stats {
+  /* display: flex - включаємо флексбокс */
+  display: flex;
+  /* gap: 3rem - відступ між елементами */
+  gap: 3rem;
+  /* margin-top: 3rem - відступ зверху */
+  margin-top: 3rem;
+}
+
+/* Стилі для елементів статистики */
+.stat-item {
+  /* display: flex - включаємо флексбокс */
+  display: flex;
+  /* flex-direction: column - вертикальне розташування */
+  flex-direction: column;
+  /* align-items: center - вирівнюємо по центру */
+  align-items: center;
+  /* gap: 0.5rem - відступ між елементами */
+  gap: 0.5rem;
+}
+
+/* Стилі для чисел в статистиці */
+.stat-number {
+  /* font-size: 2.5rem - великий розмір шрифту */
+  font-size: 2.5rem;
+  /* font-weight: 700 - жирний шрифт */
+  font-weight: 700;
+  /* color: #4facfe - колір тексту */
+  color: #4facfe;
+}
+
+/* Стилі для підписів в статистиці */
+.stat-label {
+  /* font-size: 1rem - розмір шрифту */
+  font-size: 1rem;
+  /* color: #b3b3b3 - сірий колір тексту */
+  color: #b3b3b3;
+}
+
+/* Нові стилі для секції з перевагами */
+.hero-features {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 0 4rem;
+  margin-top: 4rem;
+  gap: clamp(2rem, 4vw, 4rem);
+}
+
+.feature-item {
+  flex: 1;
+  max-width: 400px;
+  min-width: 280px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3rem 2rem;
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(5px);
+  border-radius: 24px;
+  border: 1px solid rgba(0, 255, 255, 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  min-height: 400px;
+}
+
+.feature-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(0, 255, 255, 0.2), 
+    rgba(0, 255, 255, 0.2), 
+    transparent
+  );
+}
+
+.feature-item::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255, 0, 255, 0.2), 
+    rgba(255, 0, 255, 0.2), 
+    transparent
+  );
+}
+
+.feature-item:hover {
+  background: rgba(0, 0, 0, 0.4);
+  border-color: rgba(0, 255, 255, 0.3);
+  transform: translateY(-5px);
+  box-shadow: 
+    0 0 20px rgba(0, 255, 255, 0.2),
+    0 0 30px rgba(0, 255, 255, 0.1) inset;
+}
+
+.feature-image {
+  width: 100%;
+  height: 240px;
+  object-fit: contain;
+  border-radius: 16px;
+  padding: 1.5rem;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(0, 255, 255, 0.2);
+  transition: all 0.3s ease;
+  margin-bottom: 2rem;
+}
+
+.feature-item:hover .feature-image {
+  border-color: rgba(0, 255, 255, 0.4);
+  box-shadow: 
+    0 0 15px rgba(0, 255, 255, 0.3),
+    0 0 30px rgba(0, 255, 255, 0.1) inset;
+  background: rgba(0, 0, 0, 0.5);
+  transform: scale(1.05);
+}
+
+.feature-label {
+  color: #00ffff;
+  font-weight: 600;
+  text-align: center;
+  font-size: 1.2rem;
+  line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 1200px) {
+  .hero-features {
+    padding: 0 3rem;
+    gap: clamp(1.5rem, 3vw, 3rem);
+  }
+  
+  .feature-item {
+    min-width: 260px;
+    max-width: 350px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero {
+    padding-top: 60px;
+  }
+
+  .hero-features {
+    flex-direction: column;
+    align-items: center;
+    padding: 0 2rem;
+  }
+
+  .feature-item {
+    width: 100%;
+    max-width: 400px;
+    min-height: 300px;
+  }
+
+  .feature-image {
+    height: 180px;
+  }
+
+  .feature-label {
+    font-size: 1rem;
+  }
+}
+
+/* Стилі для дисклеймера */
+.disclaimer {
+  /* font-size: 0.9rem - розмір шрифту */
+  font-size: 0.9rem;
+  /* color: #666 - сірий колір тексту */
+  color: #666;
+  /* margin-top: 2rem - відступ зверху */
+  margin-top: 2rem;
+  /* font-style: italic - курсивний шрифт */
+  font-style: italic;
+}
+
+/* Медіа-запити для адаптивності */
+@media (max-width: 768px) {
+  /* Зменшуємо розмір заголовка */
+  .hero-title {
+    font-size: 3rem;
+  }
+  
+  /* Зменшуємо розмір підзаголовка */
+  .hero-subtitle {
+    font-size: 1.2rem;
+  }
+  
+  /* Змінюємо розташування кнопок на вертикальне */
+  .hero-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  /* Змінюємо розташування елементів статистики на горизонтальне */
+  .stat-item {
+    flex-direction: row;
+    gap: 1rem;
+  }
+  
+  /* Зменшуємо розмір чисел в статистиці */
+  .stat-number {
+    font-size: 2rem;
+  }
+  
+  /* Змінюємо розташування переваг на вертикальне */
+  .hero-features {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  /* Змінюємо розташування елементів переваги на горизонтальне */
+  .feature-item {
+    width: 220px;
+    padding: 1.5rem;
+  }
+
+  /* Стилі для кнопки на мобільних */
+  .cta-button {
+    /* padding - зменшуємо відступи */
+    padding: 1rem 2rem;
+    /* font-size - зменшуємо розмір шрифту */
+    font-size: 1.2rem;
+    /* width - розтягуємо на всю ширину */
+    width: 100%;
+    /* justify-content - вирівнюємо по центру */
+    justify-content: center;
+  }
+
+  /* Змінюємо розмір іконки переваги */
+  .feature-image {
+    width: 180px;
+    height: 120px;
+  }
+
+  /* Змінюємо розмір тексту переваги */
+  .feature-label {
+    font-size: 1rem;
+  }
+} 

@@ -1,0 +1,192 @@
+/* Стилі для футера */
+.footer {
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.9) 0%, rgba(20, 20, 40, 0.9) 100%);
+  padding: 1rem;
+  border-top: 1px solid rgba(0, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(0, 255, 255, 0.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Стилі для верхньої частини футера */
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.footer-logo {
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  background: linear-gradient(90deg, #00ffff 0%, #ff00ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+}
+
+.logo-text {
+  font-size: 3rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  background: linear-gradient(90deg, #ff6384 0%, #36a2eb 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Стилі для секцій футера */
+.footer-section h3 {
+  /* Розмір шрифту */
+  font-size: 1.2rem;
+  
+  /* Відступи */
+  margin-bottom: 1.5rem;
+}
+
+/* Стилі для списків */
+.footer-section ul {
+  /* Прибираємо маркери списку */
+  list-style: none;
+  
+  /* Відступи */
+  padding: 0;
+  margin: 0;
+}
+
+/* Стилі для елементів списку */
+.footer-section ul li {
+  /* Відступи */
+  margin-bottom: 0.8rem;
+}
+
+/* Стилі для посилань */
+.footer-section a {
+  /* Прибираємо підкреслення */
+  text-decoration: none;
+  
+  /* Колір тексту */
+  color: #fff;
+  
+  /* Плавна анімація */
+  transition: color 0.3s ease;
+}
+
+/* Стиль посилань при наведенні */
+.footer-section a:hover {
+  color: #007bff;
+}
+
+/* Стилі для контактної інформації */
+.footer-section li {
+  /* Розташування іконки та тексту */
+  display: flex;
+  align-items: center;
+  
+  /* Відступи між іконкою та текстом */
+  gap: 0.5rem;
+}
+
+/* Стилі для іконок */
+.footer-section i {
+  /* Розмір іконки */
+  font-size: 1.1rem;
+  
+  /* Колір іконки */
+  color: #007bff;
+}
+
+/* Стилі для соціальних мереж */
+.social-title {
+  color: #00ffff;
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+  margin-bottom: 0.5rem;
+}
+
+.social-links {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Стилі для іконок соціальних мереж */
+.social-link {
+  color: #00ffff;
+  transition: all 0.3s ease;
+}
+
+/* Анімація іконок при наведенні */
+.social-link:hover {
+  color: #ff00ff;
+  transform: translateY(-2px);
+  filter: drop-shadow(0 0 10px rgba(0, 255, 255, 0.5));
+}
+
+/* Стилі для іконок соціальних мереж */
+.social-link svg {
+  width: 32px;
+  height: 32px;
+}
+
+/* Стилі для нижньої частини футера */
+.footer-bottom {
+  /* Відступ зверху */
+  margin-top: 2rem;
+  
+  /* Розділювальна лінія */
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  
+  /* Відступи */
+  padding-top: 1rem;
+  
+  /* Вирівнювання тексту по центру */
+  text-align: center;
+}
+
+.copyright {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+/* Медіа-запити для адаптивності */
+@media (max-width: 768px) {
+  .footer {
+    padding: 0.75rem;
+  }
+
+  .footer-logo {
+    font-size: 2rem;
+  }
+
+  .social-links {
+    gap: 1rem;
+  }
+
+  .social-link svg {
+    width: 24px;
+    height: 24px;
+  }
+} 

@@ -1,0 +1,366 @@
+/* Стилі для секції About */
+.about {
+  padding: 6rem 2rem;
+  position: relative;
+  overflow: hidden;
+  background: rgba(13, 17, 28, 0.95);
+}
+
+/* Контейнер для контенту */
+.about-container {
+  /* Розташування елементів в ряд */
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  
+  /* Відступи між колонками */
+  gap: 4rem;
+  
+  /* Максимальна ширина контейнера */
+  max-width: 1200px;
+  
+  /* Центрування контейнера */
+  margin: 0 auto;
+  
+  /* Вирівнювання елементів по центру */
+  align-items: center;
+}
+
+/* Стилі для зображення */
+.about-image img {
+  /* Розмір зображення */
+  width: 100%;
+  height: auto;
+  
+  /* Тінь */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  
+  /* Заокруглення кутів */
+  border-radius: 10px;
+}
+
+/* Стилі для текстового контенту */
+.about-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  text-align: center;
+}
+
+/* Стилі для заголовка */
+.about-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 2rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+/* Стилі для підзаголовка */
+.about-content h3 {
+  /* Розмір та колір */
+  font-size: 1.5rem;
+  color: #007bff;
+  
+  /* Жирність шрифту */
+  font-weight: 500;
+}
+
+/* Стилі для параграфа */
+.about-description {
+  max-width: 800px;
+  margin: 0 auto;
+  font-size: 1.2rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 3rem;
+}
+
+.about-description p {
+  margin-bottom: 1rem;
+}
+
+/* Стилі для списку переваг */
+.about-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  width: 100%;
+  margin-top: 2rem;
+}
+
+/* Стилі для елементів списку */
+.about-features li {
+  /* Розташування іконки та тексту */
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  
+  /* Розмір тексту */
+  font-size: 1.1rem;
+}
+
+/* Стилі для іконок */
+.about-features i {
+  /* Колір */
+  color: #28a745;
+}
+
+/* Стилі для кнопки */
+.about-cta {
+  /* Розмір та відступи */
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  
+  /* Кольори */
+  background-color: #007bff;
+  color: white;
+  
+  /* Прибираємо рамку */
+  border: none;
+  
+  /* Заокруглення кутів */
+  border-radius: 5px;
+  
+  /* Ширина кнопки */
+  width: fit-content;
+  
+  /* Курсор при наведенні */
+  cursor: pointer;
+  
+  /* Плавна анімація */
+  transition: background-color 0.3s ease;
+  margin-top: 3rem;
+}
+
+/* Стиль кнопки при наведенні */
+.about-cta:hover {
+  background-color: #0056b3;
+}
+
+/* Медіа-запит для мобільних пристроїв */
+@media (max-width: 768px) {
+  .about {
+    padding: 4rem 1rem;
+  }
+
+  .about-title {
+    font-size: 2rem;
+  }
+
+  .about-description {
+    font-size: 1.1rem;
+  }
+
+  .about-features {
+    grid-template-columns: 1fr;
+  }
+
+  .feature-card {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-title {
+    font-size: 2rem;
+  }
+  
+  .about-cta {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+.highlight {
+  background: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.about-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-bottom: 4rem;
+}
+
+.step-card {
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(5px);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
+  transition: transform 0.3s ease;
+  border: 1px solid rgba(0, 255, 255, 0.1);
+}
+
+.step-card:hover {
+  transform: translateY(-5px);
+  background: rgba(0, 0, 0, 0.4);
+  border-color: rgba(0, 255, 255, 0.3);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+}
+
+.step-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.step-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #2d3436;
+}
+
+.step-card p {
+  color: #636e72;
+  line-height: 1.5;
+}
+
+.cta-text {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: #2d3436;
+}
+
+.cta-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 2.5rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: white;
+  background: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cta-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.button-icon {
+  font-size: 1.4rem;
+}
+
+.tabs {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.tab {
+  padding: 0.75rem 1.5rem;
+  background: rgba(0, 255, 255, 0.05);
+  border: 1px solid rgba(0, 255, 255, 0.2);
+  border-radius: 4px;
+  color: #00ffff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.tab:hover {
+  background: rgba(0, 255, 255, 0.1);
+  border-color: rgba(0, 255, 255, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+}
+
+.tab.active {
+  background: rgba(0, 255, 255, 0.15);
+  border-color: #00ffff;
+  color: #fff;
+  box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+}
+
+.tab-content {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(0, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 2rem;
+  color: #fff;
+  line-height: 1.6;
+  backdrop-filter: blur(5px);
+}
+
+.tab-content h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #00ffff;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.tab-content p {
+  margin-bottom: 1rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.tab-content ul {
+  list-style: none;
+  padding: 0;
+}
+
+.tab-content li {
+  margin-bottom: 0.5rem;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.tab-content li::before {
+  content: '>';
+  position: absolute;
+  left: 0;
+  color: #00ffff;
+  font-weight: bold;
+}
+
+.feature-card {
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(5px);
+  border-radius: 16px;
+  padding: 2rem;
+  border: 1px solid rgba(0, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  background: rgba(0, 0, 0, 0.4);
+  border-color: rgba(0, 255, 255, 0.3);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+}
+
+.feature-icon {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 1rem;
+  color: #00ffff;
+}
+
+.feature-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 1rem;
+}
+
+.feature-description {
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.5;
+  font-size: 1rem;
+} 

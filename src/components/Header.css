@@ -1,0 +1,179 @@
+/* Стилі для хедера */
+.header {
+  /* position: fixed - фіксуємо хедер зверху */
+  position: fixed;
+  /* top: 0, left: 0, right: 0 - розтягуємо на всю ширину */
+  top: 0;
+  left: 0;
+  right: 0;
+  /* z-index: 1000 - розміщуємо над іншими елементами */
+  z-index: 1000;
+  /* display: flex - включаємо флексбокс */
+  display: flex;
+  /* justify-content: space-between - розподіляємо елементи по краях */
+  justify-content: space-between;
+  /* align-items: center - вирівнюємо по вертикалі */
+  align-items: center;
+  /* padding: 1rem 2rem - внутрішні відступи */
+  padding: 1rem 2rem;
+  /* background - напівпрозорий темний фон */
+  background: rgba(0, 0, 0, 0.4);
+  /* backdrop-filter - розмиття фону */
+  backdrop-filter: blur(8px);
+  /* border-bottom - нижня рамка */
+  border-bottom: 1px solid rgba(0, 255, 255, 0.1);
+}
+
+/* Стилі для логотипу */
+.logo {
+  /* display: flex - включаємо флексбокс */
+  display: flex;
+  /* align-items: center - вирівнюємо по вертикалі */
+  align-items: center;
+}
+
+/* Стилі для тексту логотипу */
+.logo-text {
+  /* font-size: 1.5rem - розмір шрифту */
+  font-size: 1.5rem;
+  /* font-weight: 700 - жирний шрифт */
+  font-weight: 700;
+  /* text-transform: uppercase - великі літери */
+  text-transform: uppercase;
+  /* letter-spacing: 2px - відступ між літерами */
+  letter-spacing: 2px;
+  /* background - градієнтний текст */
+  background: linear-gradient(90deg, #00ffff 0%, #ff00ff 100%);
+  /* -webkit-background-clip: text - обрізаємо фон по тексту */
+  -webkit-background-clip: text;
+  /* -webkit-text-fill-color: transparent - робимо текст прозорим */
+  -webkit-text-fill-color: transparent;
+  /* background-clip: text; */
+  /* text-shadow: 0 0 10px rgba(0, 255, 255, 0.3); */
+}
+
+/* Стилі для навігаційного меню */
+.nav-menu {
+  /* display: flex - включаємо флексбокс */
+  display: flex;
+  /* gap: 2rem - відступ між елементами */
+  gap: 2rem;
+}
+
+/* Стилі для посилань в меню */
+.nav-link {
+  /* color: #e0e0e0 - колір тексту */
+  color: #e0e0e0;
+  /* text-decoration: none - прибираємо підкреслення */
+  text-decoration: none;
+  /* font-weight: 500 - напівжирний шрифт */
+  font-weight: 500;
+  /* transition - плавна анімація */
+  transition: all 0.3s ease;
+  /* position: relative - для псевдоелемента */
+  position: relative;
+}
+
+/* Підкреслення при наведенні */
+.nav-link::after {
+  /* content: "" - створюємо псевдоелемент */
+  content: "";
+  /* position: absolute - абсолютне позиціонування */
+  position: absolute;
+  /* bottom: -5px - відступ знизу */
+  bottom: -5px;
+  /* left: 0 - позиціонуємо зліва */
+  left: 0;
+  /* width: 0 - початкова ширина */
+  width: 0;
+  /* height: 2px - висота лінії */
+  height: 2px;
+  /* background - градієнтний фон */
+  background: linear-gradient(90deg, #ff6384 0%, #36a2eb 100%);
+  /* transition - плавна анімація */
+  transition: width 0.3s ease;
+}
+
+/* Анімація підкреслення при наведенні */
+.nav-link:hover::after {
+  /* width: 100% - розтягуємо лінію */
+  width: 100%;
+}
+
+/* Стилі для кнопки гаманця */
+.wallet-button {
+  /* display: flex - включаємо флексбокс */
+  display: flex;
+  /* align-items: center - вирівнюємо по вертикалі */
+  align-items: center;
+  /* gap: 0.5rem - відступ між елементами */
+  gap: 0.5rem;
+  /* padding - внутрішні відступи */
+  padding: 0.75rem 1.5rem;
+  /* background - прозорий фон */
+  background: rgba(0, 255, 255, 0.1);
+  /* border - рамка */
+  border: 1px solid rgba(0, 255, 255, 0.2);
+  /* border-radius - заокруглені кути */
+  border-radius: 4px;
+  /* color - колір тексту */
+  color: #00ffff;
+  /* cursor: pointer - курсор при наведенні */
+  cursor: pointer;
+  /* transition - плавна анімація */
+  transition: all 0.3s ease;
+  /* text-transform: uppercase - великі літери */
+  text-transform: uppercase;
+  /* letter-spacing: 1px - відступ між літерами */
+  letter-spacing: 1px;
+}
+
+/* Стилі для кнопки гаманця при наведенні */
+.wallet-button:hover {
+  /* background - градієнтний фон */
+  background: rgba(0, 255, 255, 0.2);
+  /* border-color - прозора рамка */
+  border-color: rgba(0, 255, 255, 0.4);
+  /* color - білий текст */
+  color: white;
+  /* transform - невелике підняття */
+  transform: translateY(-2px);
+  /* box-shadow - тінь */
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+}
+
+/* Стилі для іконки гаманця */
+.wallet-icon {
+  /* font-size - розмір іконки */
+  font-size: 1.2rem;
+}
+
+/* Медіа-запити для адаптивності */
+@media (max-width: 768px) {
+  /* Стилі для хедера на мобільних */
+  .header {
+    /* padding - зменшуємо відступи */
+    padding: 1rem;
+  }
+
+  /* Приховуємо навігаційне меню */
+  .nav-menu {
+    display: none;
+  }
+
+  /* Зменшуємо розмір логотипу */
+  .logo-text {
+    font-size: 1.2rem;
+  }
+
+  /* Зменшуємо розмір кнопки */
+  .wallet-button {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  /* Зменшуємо розмір іконки */
+  .wallet-icon {
+    font-size: 1rem;
+  }
+} 

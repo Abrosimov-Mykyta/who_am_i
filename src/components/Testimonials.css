@@ -1,0 +1,139 @@
+.testimonials {
+  padding: 6rem 2rem;
+  background: linear-gradient(180deg, rgba(13, 12, 17, 0.8) 0%, rgba(20, 19, 26, 0.8) 100%);
+  position: relative;
+  z-index: 1;
+}
+
+.testimonials-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.testimonials-title {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 4rem;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.testimonials-title .highlight {
+  background: linear-gradient(90deg, #00ffff, #ff00ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  position: relative;
+  display: inline-block;
+}
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 1rem;
+}
+
+.testimonial-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 2rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.testimonial-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.testimonial-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.testimonial-avatar {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(45deg, #00ffff, #ff00ff);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  margin-right: 1rem;
+}
+
+.testimonial-info h3 {
+  color: #fff;
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.testimonial-info .role {
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0.25rem 0 0;
+  font-size: 0.9rem;
+}
+
+.testimonial-body {
+  margin-bottom: 1.5rem;
+}
+
+.testimonial-text {
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.6;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.testimonial-footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 1rem;
+  margin-top: auto;
+  display: flex;
+  justify-content: center;
+}
+
+.nft-badge {
+  display: flex;
+  align-items: center;
+  background: rgba(0, 255, 255, 0.1);
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.nft-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 0.5rem;
+  color: #00ffff;
+}
+
+.nft-badge span {
+  color: #00ffff;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+  .testimonials {
+    padding: 4rem 1rem;
+  }
+
+  .testimonials-title {
+    font-size: 2rem;
+    margin-bottom: 3rem;
+  }
+
+  .testimonial-card {
+    padding: 1.5rem;
+  }
+} 
