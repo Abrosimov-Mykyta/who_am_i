@@ -38,8 +38,8 @@ const QuizModal = ({ isOpen, onClose, onQuizComplete }) => {
 
       setQuestions(data.data);
     } catch (error) {
-      console.error('Помилка отримання питань:', error);
-      setError('Не вдалося завантажити питання. Спробуй ще раз.');
+      console.error('Questions fetch error:', error);
+      setError('Failed to load questions. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -60,11 +60,10 @@ const QuizModal = ({ isOpen, onClose, onQuizComplete }) => {
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
     } else {
-      // Останнє питання — відправляємо результати
-      const totalScore = newAnswers.reduce((sum, a) => sum + a.weight, 0);
+      // Last question: submit results
       setIsSubmitting(true);
       try {
-        await onQuizComplete(newAnswers, totalScore);
+        await onQuizComplete(newAnswers);
       } finally {
         setIsSubmitting(false);
       }

@@ -8,33 +8,42 @@ router.get('/questions', async (req, res) => {
     const questions = await quizService.generateQuizQuestions();
     res.json({ success: true, data: questions });
   } catch (error) {
-    console.error('Помилка при отриманні питань:', error);
+    console.error('Error getting quiz questions:', error);
     res.status(500).json({
       success: false,
-      error: 'Не вдалося отримати питання для квізу',
+      error: 'Failed to get quiz questions',
     });
   }
 });
 
 router.post('/results', async (req, res) => {
   try {
-    const { totalScore } = req.body;
-    const personalityType = quizService.getPersonalityType(totalScore);
-    const imageUrl = await quizService.generateImage(personalityType);
+    const { answers } = req.body;
+    if (!Array.isArray(answers) || answers.length === 0) {
+      return res.status(400).json({
+        success: false,
+        error: 'Answers array is required',
+      });
+    }
+
+    const personalityResult = await quizService.generatePersonalityResult(answers);
+    const imageUrl = await quizService.generateImage(personalityResult.imageStyle);
 
     res.json({
       success: true,
       data: {
         imageUrl,
-        personalityType: personalityType.type,
-        description: personalityType.description,
+        personalityType: personalityResult.personalityType,
+        description: personalityResult.description,
       },
     });
   } catch (error) {
-    console.error('Помилка при обробці результатів:', error);
+    console.error('Error processing quiz results:', error);
     res.status(500).json({
       success: false,
-      error: 'Не вдалося обробити результати квізу',
+      error: process.env.NODE_ENV === 'production'
+        ? 'Failed to process quiz results'
+        : (error.message || 'Failed to process quiz results'),
     });
   }
 });

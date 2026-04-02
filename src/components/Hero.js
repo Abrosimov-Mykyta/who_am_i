@@ -13,34 +13,33 @@ const Hero = () => {
   const [apiError, setApiError] = useState(null);
   const { openWalletModal } = useWallet();
 
-  const handleQuizComplete = async (answers, totalScore) => {
+  const handleQuizComplete = async (answers) => {
     try {
       setApiError(null);
       const response = await fetch(`${API_URL}/api/quiz/results`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ answers, totalScore }),
+        body: JSON.stringify({ answers }),
       });
 
       const data = await response.json();
 
       if (!data.success) {
-        throw new Error(data.error || 'Помилка обробки результатів');
+        throw new Error(data.error || 'Failed to process results');
       }
 
       setIsQuizModalOpen(false);
 
-      // Передаємо результати прямо в openWalletModal через контекст
+      // Pass quiz results directly to WalletModal via context
       openWalletModal({
         answers,
-        totalScore,
         imageUrl: data.data.imageUrl,
         personalityType: data.data.personalityType,
         description: data.data.description,
       });
     } catch (error) {
-      console.error('Помилка обробки результатів:', error);
-      setApiError('Не вдалося отримати результат. Спробуй ще раз.');
+      console.error('Result processing error:', error);
+      setApiError(error.message || 'Failed to get result. Please try again.');
     }
   };
 

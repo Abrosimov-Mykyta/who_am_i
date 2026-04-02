@@ -2,13 +2,13 @@ const openaiService = require('../services/openai');
 
 class QuizController {
   /**
-   * Отримує питання для квізу
+   * Gets quiz questions
    * @param {Object} req Express request object
    * @param {Object} res Express response object
    */
   async getQuestions(req, res) {
     try {
-      // Генеруємо питання через OpenAI
+      // Generate questions via OpenAI service
       const questions = await openaiService.generateQuizQuestions();
       
       res.json({
@@ -16,16 +16,16 @@ class QuizController {
         data: questions
       });
     } catch (error) {
-      console.error('Помилка при отриманні питань:', error);
+      console.error('Error getting quiz questions:', error);
       res.status(500).json({
         success: false,
-        error: 'Не вдалося отримати питання для квізу'
+        error: 'Failed to get quiz questions'
       });
     }
   }
 
   /**
-   * Обробляє результати квізу та генерує зображення
+   * Processes quiz results and generates an image
    * @param {Object} req Express request object
    * @param {Object} res Express response object
    */
@@ -33,13 +33,13 @@ class QuizController {
     try {
       const { answers, totalScore } = req.body;
 
-      // Генеруємо опис для зображення на основі результатів
+      // Generate an image prompt based on results
       const imagePrompt = await openaiService.generateImagePrompt({
         answers,
         totalScore
       });
 
-      // Генеруємо зображення за допомогою DALL-E
+      // Generate image using the image service
       const imageUrl = await openaiService.generateImage(imagePrompt);
 
       res.json({
@@ -50,10 +50,10 @@ class QuizController {
         }
       });
     } catch (error) {
-      console.error('Помилка при обробці результатів:', error);
+      console.error('Error processing quiz results:', error);
       res.status(500).json({
         success: false,
-        error: 'Не вдалося обробити результати квізу'
+        error: 'Failed to process quiz results'
       });
     }
   }

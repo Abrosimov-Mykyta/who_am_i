@@ -16,7 +16,7 @@ function App() {
         <About />
         <Testimonials />
         <Footer />
-        {/* Один єдиний WalletModal для всього додатку */}
+        {/* Single shared WalletModal for the whole app */}
         <WalletModal />
       </div>
     </WalletProvider>

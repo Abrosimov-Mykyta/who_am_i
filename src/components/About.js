@@ -1,9 +1,9 @@
-// Імпортуємо React
+// Import React
 import React from 'react';
-// Імпортуємо стилі
+// Import styles
 import './About.css';
 
-// Створюємо компонент About
+// About component
 function About() {
   const features = [
     {
@@ -60,5 +60,5 @@ function About() {
   );
 }
 
-// Експортуємо компонент
+// Export component
 export default About; 

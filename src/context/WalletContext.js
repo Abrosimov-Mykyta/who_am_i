@@ -56,12 +56,12 @@ export const WalletProvider = ({ children }) => {
   const connect = async () => {
     try {
       if (!window.ethereum) {
-        setError('MetaMask не знайдено. Будь ласка, встановіть розширення MetaMask.');
+        setError('MetaMask not found. Please install the MetaMask extension.');
         return false;
       }
       const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
       if (accounts.length === 0) {
-        setError('Акаунти не знайдено');
+        setError('No accounts found.');
         return false;
       }
       setWalletAddress(formatAddress(accounts[0]));
@@ -72,7 +72,7 @@ export const WalletProvider = ({ children }) => {
       return true;
     } catch (err) {
       setError(err.message);
-      console.error('Помилка підключення гаманця:', err);
+      console.error('Wallet connection error:', err);
       return false;
     }
   };
@@ -98,8 +98,8 @@ export const WalletProvider = ({ children }) => {
         }],
       });
     } catch (err) {
-      console.error('Помилка додавання мережі:', err);
-      setError('Не вдалося додати мережу. Спробуй вручну.');
+      console.error('Network add error:', err);
+      setError('Failed to add network. Please try manually.');
     }
   };
 

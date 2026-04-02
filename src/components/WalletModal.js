@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import './WalletModal.css';
 import { useWallet } from '../context/WalletContext';
+import { ethers } from 'ethers';
+import whoAmINftAbi from '../contracts/whoAmINftAbi.json';
+
+const NFT_CONTRACT_ADDRESS = process.env.REACT_APP_NFT_CONTRACT_ADDRESS;
 
 function WalletModal() {
   const {
@@ -30,7 +34,53 @@ function WalletModal() {
   }, [isWalletModalOpen]);
 
   const handleMintNFT = async () => {
-    alert('NFT minting coming soon! Smart contract deployment in progress.');
+    if (!NFT_CONTRACT_ADDRESS) {
+      setMintError('Set REACT_APP_NFT_CONTRACT_ADDRESS in frontend .env');
+      return;
+    }
+
+    if (!quizResults?.imageUrl) {
+      setMintError('No NFT image found. Please complete quiz again.');
+      return;
+    }
+
+    if (!window.ethereum) {
+      setMintError('MetaMask not found.');
+      return;
+    }
+
+    try {
+      setIsMinting(true);
+      setMintError('');
+
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+      const contract = new ethers.Contract(NFT_CONTRACT_ADDRESS, whoAmINftAbi, signer);
+
+      const mintPrice = await contract.mintPrice();
+      const metadata = {
+        name: quizResults.personalityType || 'Who Am I NFT',
+        description: quizResults.description || 'Generated from Who Am I quiz result.',
+        image: quizResults.imageUrl,
+        attributes: [
+          { trait_type: 'Personality', value: quizResults.personalityType || 'Unknown' },
+        ],
+      };
+
+      const tokenUri = `data:application/json;base64,${btoa(
+        unescape(encodeURIComponent(JSON.stringify(metadata)))
+      )}`;
+
+      const tx = await contract.mint(tokenUri, { value: mintPrice });
+      await tx.wait();
+
+      setNftMinted(true);
+    } catch (err) {
+      console.error('Mint error:', err);
+      setMintError(err?.shortMessage || err?.message || 'Failed to mint NFT');
+    } finally {
+      setIsMinting(false);
+    }
   };
 
   const handleClose = () => {
@@ -41,7 +91,7 @@ function WalletModal() {
 
   if (!isWalletModalOpen) return null;
 
-  // Режим з результатом тесту — широкий двоколонковий layout
+  // Quiz result mode: wide two-column layout
   if (isConnected && quizResults && quizResults.imageUrl && !nftMinted) {
     return (
       <div className="wallet-modal-overlay">
@@ -83,7 +133,7 @@ function WalletModal() {
     );
   }
 
-  // Стандартний режим
+  // Standard mode
   return (
     <div className="wallet-modal-overlay">
       <div className="wallet-modal">

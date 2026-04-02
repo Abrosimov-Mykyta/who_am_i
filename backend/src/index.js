@@ -5,17 +5,17 @@ const quizRoutes = require('./routes/quiz');
 
 const app = express();
 
-// В dev режимі дозволяємо всі origins, в prod — тільки свій домен
+// In dev allow all origins, in prod allow only configured domains
 const corsOptions = process.env.NODE_ENV === 'production'
   ? {
       origin: (process.env.ALLOWED_ORIGINS || 'http://localhost:3000').split(',').map(o => o.trim()),
       methods: ['GET', 'POST', 'OPTIONS'],
       allowedHeaders: ['Content-Type'],
     }
-  : { origin: true }; // dev — дозволяємо все
+  : { origin: true }; // dev: allow all
 
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions)); // preflight для всіх роутів
+app.options('*', cors(corsOptions)); // preflight for all routes
 
 app.use(express.json());
 app.use('/api/quiz', quizRoutes);
@@ -26,11 +26,11 @@ app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({
     success: false,
-    error: process.env.NODE_ENV === 'production' ? 'Щось пішло не так' : err.message,
+    error: process.env.NODE_ENV === 'production' ? 'Something went wrong' : err.message,
   });
 });
 
 const PORT = config.server.port;
 app.listen(PORT, () => {
-  console.log(`Сервер запущено на порту ${PORT}`);
+  console.log(`Server started on port ${PORT}`);
 });
