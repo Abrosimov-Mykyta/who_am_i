@@ -21,16 +21,22 @@ class QuizService {
       const randomSeed = Math.random().toString(36).slice(2, 10);
       const message = await anthropic.messages.create({
         model: 'claude-sonnet-4-20250514',
-        max_tokens: 1024,
+        max_tokens: 4096,
         temperature: 1,
         messages: [
           {
             role: 'user',
-            content: `Create 5 funny absurd questions for a personality quiz.
-Questions should be humorous and weird, while still hinting at character traits.
-Answers should also be playful and unexpected.
+            content: `Create exactly 10 questions for a personality quiz.
 
-Return ONLY a valid JSON array, with no text before or after:
+Goal: questions are funny, surreal, and absurd — but each question should probe a real personality axis (examples: social energy, patience, risk-taking, loyalty, honesty vs tact, chaos vs order, optimism, how you handle stress or conflict, need for control, curiosity). The player should feel like they are choosing "who they are," not random jokes only.
+
+Each question needs 4 answer options. Options must stay witty and weird, but each option should lean a different shade of that trait so answers accumulate into a coherent picture of the person. No single correct answer — all four can be valid life choices.
+
+Do NOT tie the quiz to any movie, franchise, workplace, or "monster company" setting. No references to Monsters Inc., scare floors, offices, or corporate satire. The world can be everyday life, dream logic, metaphors, or nonsense scenarios — as long as personality signal comes through.
+
+Tone: PG, playful, never cruel or bigoted. No graphic horror or gore.
+
+Return ONLY a valid JSON array — no markdown, no text before or after:
 [
   {
     "question": "question text",
@@ -40,11 +46,12 @@ Return ONLY a valid JSON array, with no text before or after:
 ]
 
 Rules:
-- Questions must be in English
-- Questions must be absurd but funny (for example: "If your fridge could talk, what would it say about you?")
-- Answers must be short, maximum 8 words each
-- weights must be from 1 to 4 in ascending order
-- Use this randomness token to diversify the set: ${randomSeed}`,
+- Exactly 10 objects in the array
+- English only
+- Each option: maximum 10 words
+- weights must be [1, 2, 3, 4] in ascending order for every question
+- Vary question styles across the set (hypotheticals, "what would you do," preferences, weird metaphors)
+- Diversify with this token: ${randomSeed}`,
           },
         ],
       });
@@ -55,6 +62,12 @@ Rules:
       if (start === -1 || end === -1) throw new Error("No JSON array found in response");
       const text = raw.slice(start, end + 1);
       const questions = JSON.parse(text);
+      if (!Array.isArray(questions) || questions.length < 10) {
+        throw new Error(`Expected 10 quiz questions, got ${questions?.length ?? 'invalid'} — retry the request`);
+      }
+      if (questions.length > 10) {
+        questions.length = 10;
+      }
       return this.shuffleArray(questions);
     } catch (error) {
       console.error('Claude question generation error:', error);
@@ -79,31 +92,34 @@ Rules:
 
       const message = await anthropic.messages.create({
         model: 'claude-sonnet-4-20250514',
-        max_tokens: 900,
+        max_tokens: 1200,
         temperature: 1,
         messages: [
           {
             role: 'user',
-            content: `Based on this quiz session, create a unique personality result.
+            content: `You are given someone's answers to an absurd personality quiz. From those answers, invent ONE original monster that feels like *them* — not a random creature.
+
+The monster must read as **alive**: a clear voice, mood, and body language. Match emotional tone to the answers:
+- Some people might get a goofy, friendly beast; others a dry, side-eye creature; others anxious and sweet; others sharp-tongued or short-fused; others calm and cryptic. Let the quiz **drive** whether this monster leans warm, silly, brooding, irritable, heroic-chaotic, etc. Do not default everything to "nice comedy sidekick."
+
+No movie or franchise tie-ins. No corporate/workplace monster jokes, no "scare floor" or office-parody titles.
 
 Quiz answers (JSON):
 ${JSON.stringify(answersPayload, null, 2)}
 
 Return ONLY valid JSON in this exact shape:
 {
-  "personalityType": "2-5 words, absurd and hilarious, non-human archetype",
-  "description": "1 short sentence, witty and logically tied to answers",
-  "imageStyle": "Detailed visual prompt for cyberpunk/digital-art portrait matching the personality"
+  "personalityType": "3-7 words: a vivid monster name or epithet (creature, hybrid, or mythic vibe — not a plain human job title)",
+  "description": "ONE short sentence: concrete habit, craving, or attitude that ties directly to their answers — feels like a character, not a horoscope",
+  "imageStyle": "Visual prompt for ONE monster portrait in a neon cyberpunk night city"
 }
 
 Rules:
 - Language: English
-- Must be unique per answer set, not a generic template
-- Tone: ridiculous, meme-worthy, coherent
-- personalityType MUST be non-human and object/creature-like (examples: Battle Toaster, Space Banana, Gum Gladiator, Neon Croissant Oracle)
-- Never use human roles like philosopher, curator, agent, thinker, strategist, hero
-- description must be concise (about 10-16 words), punchy, and funny
-- imageStyle must be concrete and visually rich`,
+- personalityType: must be non-human / monstrous (could be biological, elemental, chimeric, or absurd). Avoid bland labels like "philosopher" or "strategist" unless clearly wrapped in monster imagery.
+- description: about 10-20 words; specific and alive; can be funny OR tense OR tender depending on what the answers suggest
+- imageStyle: single expressive creature, neon cyberpunk city (wet pavement, skyscraper lights, cyan/orange/magenta). Include **facial expression and posture** that match the personality you inferred (grin, scowl, tired eyes, proud stance, etc.). Materials can mix fur, scales, slime, horns, glow, odd proportions — cinematic illustration, not gore, no text in frame.
+- Unique to this answer set; no generic filler`,
           },
         ],
       });
@@ -120,7 +136,7 @@ Rules:
 
       // Keep result copy short and punchy for UI cards.
       const firstSentence = String(parsed.description).split(/[.!?]/)[0].trim();
-      const shortDescription = firstSentence.split(/\s+/).slice(0, 16).join(' ');
+      const shortDescription = firstSentence.split(/\s+/).slice(0, 20).join(' ');
 
       return {
         personalityType: String(parsed.personalityType).trim(),
@@ -170,9 +186,7 @@ Rules:
         throw new Error(`HuggingFace error: ${response.status} ${errText}`);
       }
 
-      const imageBuffer = Buffer.from(await response.arrayBuffer());
-      const base64Image = imageBuffer.toString('base64');
-      return `data:image/png;base64,${base64Image}`;
+      return Buffer.from(await response.arrayBuffer());
     } catch (error) {
       console.error('Image generation error:', error);
       throw new Error(`Image generation failed: ${error.message}`);

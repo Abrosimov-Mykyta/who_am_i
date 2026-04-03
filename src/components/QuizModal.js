@@ -11,6 +11,7 @@ const QuizModal = ({ isOpen, onClose, onQuizComplete }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
+  const [submitError, setSubmitError] = useState(null);
 
   useEffect(() => {
     if (isOpen) {
@@ -23,6 +24,7 @@ const QuizModal = ({ isOpen, onClose, onQuizComplete }) => {
     setCurrentQuestion(0);
     setAnswers([]);
     setError(null);
+    setSubmitError(null);
   };
 
   const fetchQuestions = async () => {
@@ -46,6 +48,7 @@ const QuizModal = ({ isOpen, onClose, onQuizComplete }) => {
   };
 
   const handleAnswer = async (answerIndex) => {
+    setSubmitError(null);
     const newAnswers = [
       ...answers,
       {
@@ -60,10 +63,13 @@ const QuizModal = ({ isOpen, onClose, onQuizComplete }) => {
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
     } else {
-      // Last question: submit results
       setIsSubmitting(true);
       try {
         await onQuizComplete(newAnswers);
+      } catch (err) {
+        const msg = err?.message || 'Could not analyze your answers. Please try again.';
+        setSubmitError(msg);
+        setAnswers(answers);
       } finally {
         setIsSubmitting(false);
       }
@@ -105,6 +111,12 @@ const QuizModal = ({ isOpen, onClose, onQuizComplete }) => {
             <div className="question-counter">
               Question {currentQuestion + 1} of {questions.length}
             </div>
+
+            {submitError && (
+              <div className="error-message quiz-modal__submit-error" role="alert">
+                <p>{submitError}</p>
+              </div>
+            )}
 
             <h2 className="question-text">
               {questions[currentQuestion].question}

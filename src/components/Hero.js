@@ -1,46 +1,44 @@
 import React, { useState } from 'react';
 import './Hero.css';
 import QuizModal from './QuizModal';
-import { useWallet } from '../context/WalletContext';
 import quizIcon from '../assets/quiz-icon.png';
 import aiNftIcon from '../assets/ai-nft-icon.png';
 import memeIcon from '../assets/meme-icon.png';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
 
-const Hero = () => {
+const Hero = ({ onQuizResultReady }) => {
   const [isQuizModalOpen, setIsQuizModalOpen] = useState(false);
   const [apiError, setApiError] = useState(null);
-  const { openWalletModal } = useWallet();
 
   const handleQuizComplete = async (answers) => {
+    setApiError(null);
+    const response = await fetch(`${API_URL}/api/quiz/results`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ answers }),
+    });
+
+    let data;
     try {
-      setApiError(null);
-      const response = await fetch(`${API_URL}/api/quiz/results`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ answers }),
-      });
-
-      const data = await response.json();
-
-      if (!data.success) {
-        throw new Error(data.error || 'Failed to process results');
-      }
-
-      setIsQuizModalOpen(false);
-
-      // Pass quiz results directly to WalletModal via context
-      openWalletModal({
-        answers,
-        imageUrl: data.data.imageUrl,
-        personalityType: data.data.personalityType,
-        description: data.data.description,
-      });
-    } catch (error) {
-      console.error('Result processing error:', error);
-      setApiError(error.message || 'Failed to get result. Please try again.');
+      data = await response.json();
+    } catch {
+      throw new Error(`Server error (${response.status}). Please try again.`);
     }
+
+    if (!response.ok || !data.success) {
+      const msg = data?.error || `Failed to process results (${response.status})`;
+      setApiError(msg);
+      throw new Error(msg);
+    }
+
+    setIsQuizModalOpen(false);
+    onQuizResultReady?.({
+      answers,
+      imageUrl: data.data.imageUrl,
+      personalityType: data.data.personalityType,
+      description: data.data.description,
+    });
   };
 
   return (
@@ -92,6 +90,7 @@ const Hero = () => {
         onClose={() => setIsQuizModalOpen(false)}
         onQuizComplete={handleQuizComplete}
       />
+
     </section>
   );
 };

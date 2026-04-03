@@ -1,32 +1,49 @@
-import hre from 'hardhat';
-import { ethers } from 'ethers';
+import { network } from 'hardhat';
 
+/**
+ * Deploy WhoAmINFT to Polygon Amoy.
+ *
+ * Prerequisites:
+ * - blockchain/.env with PRIVATE_KEY (deployer wallet with Amoy MATIC for gas)
+ * - Optional: AMOY_RPC_URL, DEPLOY_MAX_SUPPLY (0 = unlimited), DEPLOY_MINT_PRICE_WEI (0 = free mint)
+ *
+ * Run: npm run deploy:amoy
+ */
 async function main() {
-  console.log('Deploying WhoAmINFT contract...');
+  const { ethers } = await network.connect();
 
-  const provider = new ethers.JsonRpcProvider(
-    process.env.AMOY_RPC_URL || 'https://rpc-amoy.polygon.technology'
-  );
-  const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
+  const signers = await ethers.getSigners();
+  if (signers.length === 0) {
+    throw new Error(
+      'No deployer account. Add PRIVATE_KEY to blockchain/.env (64 hex chars, with or without 0x).'
+    );
+  }
 
-  console.log('Deploying with account:', wallet.address);
+  const deployer = signers[0];
+  const balance = await ethers.provider.getBalance(deployer.address);
 
-  const balance = await provider.getBalance(wallet.address);
-  console.log('Account balance:', ethers.formatEther(balance), 'MATIC');
+  console.log('Deploying WhoAmINFT with:', deployer.address);
+  console.log('Balance:', ethers.formatEther(balance), 'MATIC');
 
-  // Читаємо артефакт контракту
-  const artifact = await hre.artifacts.readArtifact('WhoAmINFT');
+  if (balance === 0n) {
+    console.warn('Warning: zero balance — fund this address with Amoy test MATIC before deploying.');
+  }
 
-  const factory = new ethers.ContractFactory(artifact.abi, artifact.bytecode, wallet);
-  const contract = await factory.deploy(0, 0);
+  const maxSupply = BigInt(process.env.DEPLOY_MAX_SUPPLY ?? '0');
+  const mintPrice = BigInt(process.env.DEPLOY_MINT_PRICE_WEI ?? '0');
 
+  console.log('Constructor args: maxSupply =', maxSupply.toString(), ', mintPrice (wei) =', mintPrice.toString());
+
+  const contract = await ethers.deployContract('WhoAmINFT', [maxSupply, mintPrice]);
   await contract.waitForDeployment();
 
   const address = await contract.getAddress();
-  console.log('✅ WhoAmINFT deployed to:', address);
   console.log('');
-  console.log('Add this to your backend .env:');
-  console.log(`NFT_CONTRACT_ADDRESS=${address}`);
+  console.log('✅ WhoAmINFT deployed to:', address);
+  console.log('   Polygonscan:', `https://amoy.polygonscan.com/address/${address}`);
+  console.log('');
+  console.log('Add to who_am_i/.env (then restart npm start):');
+  console.log(`REACT_APP_NFT_CONTRACT_ADDRESS=${address}`);
 }
 
 main()

@@ -1,0 +1,170 @@
+/* Portal root: escape .hero overflow:hidden and .App perspective */
+.result-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.88);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 1.25rem;
+  box-sizing: border-box;
+  backdrop-filter: blur(6px);
+}
+
+/* Wallet UI stacked inside this portal (avoids global z-index / compositing issues) */
+.result-modal-wallet-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.82);
+  backdrop-filter: blur(6px);
+  padding: 1.25rem;
+  box-sizing: border-box;
+}
+
+/* Quiz result shell — not the connect-wallet dialog (no .wallet-modal class names) */
+.result-modal__surface {
+  background: rgba(13, 17, 28, 0.95);
+  border-radius: 24px;
+  padding: 2rem;
+  width: 95%;
+  max-width: 860px;
+  position: relative;
+  border: 1px solid rgba(0, 255, 255, 0.1);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
+}
+
+.result-modal__layout {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.result-modal__media-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.result-modal__card {
+  max-height: min(92vh, 900px);
+  overflow-y: auto;
+}
+
+.result-modal__inner {
+  align-items: stretch;
+}
+
+.result-modal__image-col {
+  align-self: flex-start;
+}
+
+.result-modal__nft-frame {
+  max-width: 100%;
+  width: min(300px, 100%);
+}
+
+.result-modal__image-placeholder {
+  width: 100%;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #889;
+  font-size: 0.95rem;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.result-modal__info-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  min-width: 0;
+  justify-content: flex-start;
+}
+
+.result-modal__description {
+  margin: 0;
+  text-align: left;
+  line-height: 1.65;
+  flex-shrink: 0;
+}
+
+.result-modal__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  margin-top: 0.25rem;
+}
+
+.result-modal__wallet-strip {
+  width: 100%;
+  max-width: none;
+  box-sizing: border-box;
+  align-items: stretch;
+  text-align: center;
+}
+
+.result-modal__wallet-strip .disconnect-button {
+  align-self: center;
+}
+
+.result-modal__primary-btn {
+  margin-top: 0.25rem;
+  flex-shrink: 0;
+}
+
+.result-modal__minted {
+  margin: auto 0;
+}
+
+.result-modal-hint {
+  color: #b4b4b4;
+  margin: 0;
+  text-align: left;
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+.result-modal__config-hint {
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: #c5d0dc;
+  text-align: left;
+  margin: 0;
+  padding: 0.85rem 1rem;
+  background: rgba(0, 255, 255, 0.06);
+  border-radius: 10px;
+  border: 1px solid rgba(0, 255, 255, 0.2);
+}
+
+.result-modal__config-hint code {
+  font-size: 0.88em;
+  color: #7fe8e8;
+  word-break: break-all;
+}
+
+@media (max-width: 640px) {
+  .result-modal-overlay {
+    padding: 0.75rem;
+    align-items: flex-start;
+    padding-top: 2rem;
+  }
+
+  .result-modal__layout {
+    flex-direction: column;
+  }
+
+  .result-modal__surface {
+    width: 95%;
+    padding: 1.2rem;
+  }
+}

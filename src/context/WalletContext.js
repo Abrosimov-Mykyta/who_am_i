@@ -12,7 +12,6 @@ export const WalletProvider = ({ children }) => {
   const [isCorrectNetwork, setIsCorrectNetwork] = useState(false);
   const [error, setError] = useState('');
   const [isWalletModalOpen, setIsWalletModalOpen] = useState(false);
-  const [quizResults, setQuizResults] = useState(null);
 
   const formatAddress = (address) =>
     `${address.substring(0, 6)}...${address.substring(address.length - 4)}`;
@@ -34,6 +33,7 @@ export const WalletProvider = ({ children }) => {
       disconnect();
     } else {
       setWalletAddress(formatAddress(accounts[0]));
+      setIsConnected(true);
     }
   }, []);
 
@@ -45,6 +45,21 @@ export const WalletProvider = ({ children }) => {
 
     window.ethereum.request({ method: 'eth_chainId' })
       .then(handleChainChanged)
+      .catch(console.error);
+
+    // Restore session if the site is already authorized (no gate on quiz results UI)
+    window.ethereum.request({ method: 'eth_accounts' })
+      .then((accounts) => {
+        if (accounts.length > 0) {
+          setWalletAddress(formatAddress(accounts[0]));
+          setIsConnected(true);
+          return window.ethereum.request({ method: 'eth_chainId' });
+        }
+        return null;
+      })
+      .then((chainId) => {
+        if (chainId) handleChainChanged(chainId);
+      })
       .catch(console.error);
 
     return () => {
@@ -103,14 +118,12 @@ export const WalletProvider = ({ children }) => {
     }
   };
 
-  const openWalletModal = (results = null) => {
-    setQuizResults(results);
+  const openWalletModal = () => {
     setIsWalletModalOpen(true);
   };
 
   const closeWalletModal = () => {
     setIsWalletModalOpen(false);
-    setQuizResults(null);
   };
 
   return (
@@ -122,7 +135,6 @@ export const WalletProvider = ({ children }) => {
         isCorrectNetwork,
         error,
         isWalletModalOpen,
-        quizResults,
         connect,
         disconnect,
         addAmoyNetwork,

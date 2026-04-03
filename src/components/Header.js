@@ -11,7 +11,7 @@ function Header() {
         <span className="logo-text">Who Am I</span>
       </div>
 
-      <button className="wallet-button" onClick={openWalletModal}>
+      <button className="wallet-button" type="button" onClick={() => openWalletModal()}>
         {isConnected ? walletAddress : 'Connect Wallet'}
       </button>
     </header>

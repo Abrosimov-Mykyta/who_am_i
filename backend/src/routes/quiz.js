@@ -1,5 +1,6 @@
 const express = require('express');
 const quizService = require('../services/openai');
+const { saveQuizImagePng } = require('../lib/saveQuizImage');
 
 const router = express.Router();
 
@@ -27,7 +28,8 @@ router.post('/results', async (req, res) => {
     }
 
     const personalityResult = await quizService.generatePersonalityResult(answers);
-    const imageUrl = await quizService.generateImage(personalityResult.imageStyle);
+    const imageBuffer = await quizService.generateImage(personalityResult.imageStyle);
+    const imageUrl = await saveQuizImagePng(imageBuffer);
 
     res.json({
       success: true,
