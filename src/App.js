@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { WalletProvider } from './context/WalletContext';
+import { resolveQuizImageUrl } from './utils/resolveQuizImageUrl';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import About from './components/About';
@@ -18,7 +19,10 @@ function App() {
         <Header />
         <Hero
           onQuizResultReady={(payload) => {
-            setQuizResult(payload);
+            setQuizResult({
+              ...payload,
+              imageUrl: resolveQuizImageUrl(payload.imageUrl),
+            });
             setIsResultModalOpen(true);
           }}
         />

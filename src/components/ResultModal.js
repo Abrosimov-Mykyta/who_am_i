@@ -6,6 +6,7 @@ import { useWallet } from '../context/WalletContext';
 import WalletPanel from './WalletPanel';
 import { ethers } from 'ethers';
 import whoAmINftAbi from '../contracts/whoAmINftAbi.json';
+import { resolveQuizImageUrl } from '../utils/resolveQuizImageUrl';
 
 function resolveNftContractAddress() {
   const raw = process.env.REACT_APP_NFT_CONTRACT_ADDRESS?.trim();
@@ -93,10 +94,11 @@ function ResultModal({ isOpen, onClose, result }) {
       const contract = new ethers.Contract(NFT_CONTRACT_ADDRESS, whoAmINftAbi, signer);
 
       const mintPrice = await contract.mintPrice();
+      const imageForMetadata = resolveQuizImageUrl(result.imageUrl);
       const metadata = {
         name: result.personalityType || 'Who Am I NFT',
         description: result.description || 'Generated from Who Am I quiz result.',
-        image: result.imageUrl,
+        image: imageForMetadata,
         attributes: [
           { trait_type: 'Personality', value: result.personalityType || 'Unknown' },
         ],
@@ -106,7 +108,22 @@ function ResultModal({ isOpen, onClose, result }) {
         unescape(encodeURIComponent(JSON.stringify(metadata)))
       )}`;
 
-      const tx = await contract.mint(tokenUri, { value: mintPrice });
+      const feeData = await provider.getFeeData();
+      const minTip = ethers.parseUnits('30', 'gwei');
+      let maxPriorityFeePerGas = feeData.maxPriorityFeePerGas ?? minTip;
+      if (maxPriorityFeePerGas < minTip) maxPriorityFeePerGas = minTip;
+      else maxPriorityFeePerGas = (maxPriorityFeePerGas * 15n) / 10n;
+
+      let maxFeePerGas = feeData.maxFeePerGas;
+      if (!maxFeePerGas || maxFeePerGas < maxPriorityFeePerGas * 2n) {
+        maxFeePerGas = maxPriorityFeePerGas * 2n;
+      }
+
+      const tx = await contract.mint(tokenUri, {
+        value: mintPrice,
+        maxFeePerGas,
+        maxPriorityFeePerGas,
+      });
       await tx.wait();
 
       setNftMinted(true);
@@ -119,6 +136,10 @@ function ResultModal({ isOpen, onClose, result }) {
       ) {
         setMintError(
           'Mint failed (often: no Amoy MATIC for gas, wrong contract address, or network mismatch). Top up test MATIC and confirm REACT_APP_NFT_CONTRACT_ADDRESS matches your Amoy deployment.'
+        );
+      } else if (msg.includes('tip cap') || msg.includes('maxPriorityFeePerGas') || msg.includes('gas')) {
+        setMintError(
+          'Network gas fees are higher than the wallet suggested. Try again, or in MetaMask use Edit gas / Aggressive.'
         );
       } else {
         setMintError(msg);
@@ -135,6 +156,8 @@ function ResultModal({ isOpen, onClose, result }) {
       result.description);
 
   if (!isOpen || !hasContent) return null;
+
+  const displayImageUrl = result.imageUrl ? resolveQuizImageUrl(result.imageUrl) : null;
 
   const modal = (
     <div className="result-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="result-modal-title" data-modal="quiz-result">
@@ -155,8 +178,8 @@ function ResultModal({ isOpen, onClose, result }) {
           <div className="result-modal__media-col result-modal__image-col">
             <h2 id="result-modal-title" className="result-title">{result.personalityType || 'Your result'}</h2>
             <div className="nft-image-container result-modal__nft-frame">
-              {result.imageUrl ? (
-                <img src={result.imageUrl} alt={result.personalityType || 'Quiz result'} className="nft-image" />
+              {displayImageUrl ? (
+                <img src={displayImageUrl} alt={result.personalityType || 'Quiz result'} className="nft-image" />
               ) : (
                 <div className="result-modal__image-placeholder" aria-hidden>
                   Image loading…
