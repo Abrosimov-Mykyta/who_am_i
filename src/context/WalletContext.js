@@ -16,6 +16,14 @@ export const WalletProvider = ({ children }) => {
   const formatAddress = (address) =>
     `${address.substring(0, 6)}...${address.substring(address.length - 4)}`;
 
+  const disconnect = useCallback(() => {
+    setWalletAddress('');
+    setIsConnected(false);
+    setNetwork('');
+    setIsCorrectNetwork(false);
+    setError('');
+  }, []);
+
   const handleChainChanged = useCallback((chainId) => {
     if (chainId === AMOY_CHAIN_ID) {
       setNetwork(AMOY_NETWORK_NAME);
@@ -28,14 +36,28 @@ export const WalletProvider = ({ children }) => {
     }
   }, []);
 
-  const handleAccountsChanged = useCallback((accounts) => {
-    if (accounts.length === 0) {
+  const applyAccounts = useCallback((accounts) => {
+    if (!accounts || accounts.length === 0) {
       disconnect();
-    } else {
-      setWalletAddress(formatAddress(accounts[0]));
-      setIsConnected(true);
+      return;
     }
-  }, []);
+    setWalletAddress(formatAddress(accounts[0]));
+    setIsConnected(true);
+  }, [disconnect]);
+
+  const handleAccountsChanged = useCallback((accounts) => {
+    applyAccounts(accounts);
+  }, [applyAccounts]);
+
+  const syncAccountsFromWallet = useCallback(async () => {
+    if (!window.ethereum) return;
+    try {
+      const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+      applyAccounts(accounts);
+    } catch (e) {
+      console.error('eth_accounts sync error:', e);
+    }
+  }, [applyAccounts]);
 
   useEffect(() => {
     if (!window.ethereum) return;
@@ -47,12 +69,10 @@ export const WalletProvider = ({ children }) => {
       .then(handleChainChanged)
       .catch(console.error);
 
-    // Restore session if the site is already authorized (no gate on quiz results UI)
     window.ethereum.request({ method: 'eth_accounts' })
       .then((accounts) => {
+        applyAccounts(accounts);
         if (accounts.length > 0) {
-          setWalletAddress(formatAddress(accounts[0]));
-          setIsConnected(true);
           return window.ethereum.request({ method: 'eth_chainId' });
         }
         return null;
@@ -66,7 +86,21 @@ export const WalletProvider = ({ children }) => {
       window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
       window.ethereum.removeListener('chainChanged', handleChainChanged);
     };
-  }, [handleAccountsChanged, handleChainChanged]);
+  }, [handleAccountsChanged, handleChainChanged, applyAccounts]);
+
+  useEffect(() => {
+    const onVisible = () => {
+      if (document.visibilityState === 'visible') {
+        syncAccountsFromWallet();
+      }
+    };
+    window.addEventListener('focus', syncAccountsFromWallet);
+    document.addEventListener('visibilitychange', onVisible);
+    return () => {
+      window.removeEventListener('focus', syncAccountsFromWallet);
+      document.removeEventListener('visibilitychange', onVisible);
+    };
+  }, [syncAccountsFromWallet]);
 
   const connect = async () => {
     try {
@@ -79,8 +113,7 @@ export const WalletProvider = ({ children }) => {
         setError('No accounts found.');
         return false;
       }
-      setWalletAddress(formatAddress(accounts[0]));
-      setIsConnected(true);
+      applyAccounts(accounts);
       setError('');
       const chainId = await window.ethereum.request({ method: 'eth_chainId' });
       handleChainChanged(chainId);
@@ -90,14 +123,6 @@ export const WalletProvider = ({ children }) => {
       console.error('Wallet connection error:', err);
       return false;
     }
-  };
-
-  const disconnect = () => {
-    setWalletAddress('');
-    setIsConnected(false);
-    setNetwork('');
-    setIsCorrectNetwork(false);
-    setError('');
   };
 
   const addAmoyNetwork = async () => {
