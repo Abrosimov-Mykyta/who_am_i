@@ -161,7 +161,7 @@ Rules:
       const prompt = `${imageStyle}, high quality digital art, vivid neon colors, dark background, detailed, professional illustration`;
 
       const response = await fetch(
-        'https://router.huggingface.co/hf-inference/models/black-forest-labs/FLUX.1-dev',
+        'https://router.huggingface.co/hf-inference/models/stabilityai/stable-diffusion-2-1',
         {
           method: 'POST',
           headers: {
