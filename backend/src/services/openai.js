@@ -134,7 +134,6 @@ Rules:
         throw new Error('Claude response missing required personality fields');
       }
 
-      // Keep result copy short and punchy for UI cards.
       const firstSentence = String(parsed.description).split(/[.!?]/)[0].trim();
       const shortDescription = firstSentence.split(/\s+/).slice(0, 20).join(' ');
 
@@ -150,7 +149,7 @@ Rules:
   }
 
   /**
-   * Generates image via Stable Diffusion
+   * Generates image via fal-ai through HuggingFace router
    */
   async generateImage(imageStyle) {
     if (!config.huggingface.apiKey) {
@@ -161,7 +160,7 @@ Rules:
       const prompt = `${imageStyle}, high quality digital art, vivid neon colors, dark background, detailed, professional illustration`;
 
       const response = await fetch(
-        'https://router.huggingface.co/fal-ai/models/black-forest-labs/FLUX.1-schnell',
+        'https://router.huggingface.co/fal-ai/flux/schnell',
         {
           method: 'POST',
           headers: {
@@ -169,13 +168,10 @@ Rules:
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            inputs: prompt,
-            parameters: {
-              negative_prompt: 'blurry, low quality, distorted, ugly, text, watermark',
-              width: 1024,
-              height: 1024,
-              num_inference_steps: 4,
-            },
+            prompt: prompt,
+            image_size: 'square_hd',
+            num_inference_steps: 4,
+            num_images: 1,
           }),
         }
       );
@@ -185,7 +181,16 @@ Rules:
         throw new Error(`HuggingFace error: ${response.status} ${errText}`);
       }
 
-      return Buffer.from(await response.arrayBuffer());
+      // fal-ai returns JSON with image URL, not raw binary
+      const result = await response.json();
+      const imageUrl = result.images[0].url;
+
+      const imgResponse = await fetch(imageUrl);
+      if (!imgResponse.ok) {
+        throw new Error(`Failed to download image from fal-ai: ${imgResponse.status}`);
+      }
+
+      return Buffer.from(await imgResponse.arrayBuffer());
     } catch (error) {
       console.error('Image generation error:', error);
       throw new Error(`Image generation failed: ${error.message}`);
