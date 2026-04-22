@@ -161,7 +161,7 @@ Rules:
       const prompt = `${imageStyle}, high quality digital art, vivid neon colors, dark background, detailed, professional illustration`;
 
       const response = await fetch(
-        'https://router.huggingface.co/hf-inference/models/stabilityai/stable-diffusion-2-1',
+        'https://router.huggingface.co/fal-ai/models/black-forest-labs/FLUX.1-schnell',
         {
           method: 'POST',
           headers: {
@@ -174,8 +174,7 @@ Rules:
               negative_prompt: 'blurry, low quality, distorted, ugly, text, watermark',
               width: 1024,
               height: 1024,
-              num_inference_steps: 30,
-              guidance_scale: 7.5,
+              num_inference_steps: 4,
             },
           }),
         }
