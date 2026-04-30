@@ -7,6 +7,7 @@ module.exports = {
   },
   huggingface: {
     apiKey: env.HUGGINGFACE_API_KEY,
+    imageModel: env.HUGGINGFACE_IMAGE_MODEL || 'black-forest-labs/FLUX.1-schnell',
   },
   anthropic: {
     apiKey: env.ANTHROPIC_API_KEY,

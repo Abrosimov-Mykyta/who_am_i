@@ -158,9 +158,10 @@ Rules:
 
     try {
       const prompt = `${imageStyle}, high quality digital art, vivid neon colors, dark background, detailed, professional illustration`;
+      const model = config.huggingface.imageModel;
 
       const response = await fetch(
-        'https://router.huggingface.co/fal-ai/flux/schnell',
+        `https://router.huggingface.co/hf-inference/models/${model}`,
         {
           method: 'POST',
           headers: {
@@ -168,29 +169,28 @@ Rules:
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            prompt: prompt,
-            image_size: 'square_hd',
-            num_inference_steps: 4,
-            num_images: 1,
+            inputs: prompt,
+            parameters: {
+              width: 1024,
+              height: 1024,
+              num_inference_steps: 4,
+            },
           }),
         }
       );
 
       if (!response.ok) {
         const errText = await response.text();
-        throw new Error(`HuggingFace error: ${response.status} ${errText}`);
+        throw new Error(`HuggingFace image generation error for model "${model}": ${response.status} ${errText}`);
       }
 
-      // fal-ai returns JSON with image URL, not raw binary
-      const result = await response.json();
-      const imageUrl = result.images[0].url;
-
-      const imgResponse = await fetch(imageUrl);
-      if (!imgResponse.ok) {
-        throw new Error(`Failed to download image from fal-ai: ${imgResponse.status}`);
+      const contentType = response.headers.get('content-type') || '';
+      if (!contentType.startsWith('image/')) {
+        const errText = await response.text();
+        throw new Error(`Unexpected HuggingFace response content-type "${contentType}": ${errText}`);
       }
 
-      return Buffer.from(await imgResponse.arrayBuffer());
+      return Buffer.from(await response.arrayBuffer());
     } catch (error) {
       console.error('Image generation error:', error);
       throw new Error(`Image generation failed: ${error.message}`);
