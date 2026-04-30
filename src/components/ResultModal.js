@@ -8,6 +8,11 @@ import { ethers } from 'ethers';
 import whoAmINftAbi from '../contracts/whoAmINftAbi.json';
 import { resolveQuizImageUrl } from '../utils/resolveQuizImageUrl';
 
+const AMOY_FAUCETS = [
+  { href: 'https://faucet.polygon.technology/', label: 'Polygon Faucet' },
+  { href: 'https://www.alchemy.com/faucets/polygon-amoy/', label: 'Alchemy Amoy Faucet' },
+];
+
 function resolveNftContractAddress() {
   const raw = process.env.REACT_APP_NFT_CONTRACT_ADDRESS?.trim();
   if (!raw) return null;
@@ -108,22 +113,7 @@ function ResultModal({ isOpen, onClose, result }) {
         unescape(encodeURIComponent(JSON.stringify(metadata)))
       )}`;
 
-      const feeData = await provider.getFeeData();
-      const minTip = ethers.parseUnits('30', 'gwei');
-      let maxPriorityFeePerGas = feeData.maxPriorityFeePerGas ?? minTip;
-      if (maxPriorityFeePerGas < minTip) maxPriorityFeePerGas = minTip;
-      else maxPriorityFeePerGas = (maxPriorityFeePerGas * 15n) / 10n;
-
-      let maxFeePerGas = feeData.maxFeePerGas;
-      if (!maxFeePerGas || maxFeePerGas < maxPriorityFeePerGas * 2n) {
-        maxFeePerGas = maxPriorityFeePerGas * 2n;
-      }
-
-      const tx = await contract.mint(tokenUri, {
-        value: mintPrice,
-        maxFeePerGas,
-        maxPriorityFeePerGas,
-      });
+      const tx = await contract.mint(tokenUri, { value: mintPrice });
       await tx.wait();
 
       setNftMinted(true);
@@ -135,11 +125,16 @@ function ResultModal({ isOpen, onClose, result }) {
         err?.code === 'CALL_EXCEPTION'
       ) {
         setMintError(
-          'Mint failed (often: no Amoy MATIC for gas, wrong contract address, or network mismatch). Top up test MATIC and confirm REACT_APP_NFT_CONTRACT_ADDRESS matches your Amoy deployment.'
+          'Mint failed. The most common causes are not enough Amoy POL for gas, a wrong NFT contract address, or a wallet/network mismatch.'
         );
-      } else if (msg.includes('tip cap') || msg.includes('maxPriorityFeePerGas') || msg.includes('gas')) {
+      } else if (
+        msg.includes('tip cap') ||
+        msg.includes('maxPriorityFeePerGas') ||
+        msg.includes('eth_maxPriorityFeePerGas') ||
+        msg.includes('gas')
+      ) {
         setMintError(
-          'Network gas fees are higher than the wallet suggested. Try again, or in MetaMask use Edit gas / Aggressive.'
+          'Your wallet or RPC rejected the gas suggestion for this transaction. Refresh the page, reconnect MetaMask on Polygon Amoy, and try minting again.'
         );
       } else {
         setMintError(msg);
@@ -226,7 +221,23 @@ function ResultModal({ isOpen, onClose, result }) {
                         </div>
                       )}
                       {(error || mintError) && (
-                        <div className="error-message"><p>{error || mintError}</p></div>
+                        <div className="error-message">
+                          <p>{error || mintError}</p>
+                          {mintError && (
+                            <p>
+                              Need free Amoy POL for gas? Try the{' '}
+                              {AMOY_FAUCETS.map((faucet, index) => (
+                                <React.Fragment key={faucet.href}>
+                                  {index > 0 ? ' or ' : ''}
+                                  <a className="error-link" href={faucet.href} target="_blank" rel="noreferrer">
+                                    {faucet.label}
+                                  </a>
+                                </React.Fragment>
+                              ))}
+                              . If MetaMask still shows the wrong token symbol, remove and re-add the Amoy network.
+                            </p>
+                          )}
+                        </div>
                       )}
                       <button
                         type="button"

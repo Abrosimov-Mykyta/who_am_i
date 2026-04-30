@@ -132,7 +132,7 @@ export const WalletProvider = ({ children }) => {
         params: [{
           chainId: AMOY_CHAIN_ID,
           chainName: AMOY_NETWORK_NAME,
-          nativeCurrency: { name: 'MATIC', symbol: 'MATIC', decimals: 18 },
+          nativeCurrency: { name: 'POL', symbol: 'POL', decimals: 18 },
           rpcUrls: ['https://rpc-amoy.polygon.technology'],
           blockExplorerUrls: ['https://amoy.polygonscan.com'],
         }],

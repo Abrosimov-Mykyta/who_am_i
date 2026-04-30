@@ -144,6 +144,14 @@
   border: 1px solid rgba(255, 77, 77, 0.2);
 }
 
+.error-message p {
+  margin: 0;
+}
+
+.error-message p + p {
+  margin-top: 0.75rem;
+}
+
 .error-link {
   color: #00ffff;
   text-decoration: none;
